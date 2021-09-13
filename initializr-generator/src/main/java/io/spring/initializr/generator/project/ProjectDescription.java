@@ -18,6 +18,7 @@ package io.spring.initializr.generator.project;
 
 import java.util.Map;
 
+import io.spring.initializr.generator.architecture.Architecture;
 import io.spring.initializr.generator.buildsystem.BuildSystem;
 import io.spring.initializr.generator.buildsystem.Dependency;
 import io.spring.initializr.generator.language.Language;
@@ -29,6 +30,7 @@ import io.spring.initializr.generator.version.Version;
  *
  * @author Andy Wilkinson
  * @author Stephane Nicoll
+ * @author Duan zhiqiang
  */
 public interface ProjectDescription {
 
@@ -118,5 +120,11 @@ public interface ProjectDescription {
 	 * @return the base directory
 	 */
 	String getBaseDirectory();
+
+	/**
+	 * 返回选择的架构或者{@code null}.
+	 * @return 架构
+	 */
+	Architecture getArchitecture();
 
 }

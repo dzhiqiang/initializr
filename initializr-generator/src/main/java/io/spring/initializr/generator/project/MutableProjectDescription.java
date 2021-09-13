@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import io.spring.initializr.generator.architecture.Architecture;
 import io.spring.initializr.generator.buildsystem.BuildSystem;
 import io.spring.initializr.generator.buildsystem.Dependency;
 import io.spring.initializr.generator.language.Language;
@@ -32,6 +33,7 @@ import org.springframework.util.StringUtils;
  * A mutable implementation of {@link ProjectDescription}.
  *
  * @author Andy Wilkinson
+ * @author Duan zhiqiang
  */
 public class MutableProjectDescription implements ProjectDescription {
 
@@ -61,6 +63,8 @@ public class MutableProjectDescription implements ProjectDescription {
 
 	private String baseDirectory;
 
+	private Architecture architecture;
+
 	public MutableProjectDescription() {
 	}
 
@@ -82,6 +86,7 @@ public class MutableProjectDescription implements ProjectDescription {
 		this.applicationName = source.getApplicationName();
 		this.packageName = source.getPackageName();
 		this.baseDirectory = source.getBaseDirectory();
+		this.architecture = source.getArchitecture();
 	}
 
 	@Override
@@ -218,6 +223,15 @@ public class MutableProjectDescription implements ProjectDescription {
 
 	public void setBaseDirectory(String baseDirectory) {
 		this.baseDirectory = baseDirectory;
+	}
+
+	@Override
+	public Architecture getArchitecture() {
+		return this.architecture;
+	}
+
+	public void setArchitecture(Architecture architecture) {
+		this.architecture = architecture;
 	}
 
 }
