@@ -1,7 +1,16 @@
 {
   "configuration": {
     "env": {
-      "forceSsl": true
+      "forceSsl": true,
+      "templates" :
+      {
+        "mybatis": {"name": "mybatis","templateType": "code","type": "dao"},
+        "h2": {"name": "h2","templateType": "code","type": "dao"},
+        "User": {"name": "user","templateType": "code","type": "api"},
+        "UserController": {"name": "UserController","templateType": "code","type": "web"},
+        "ProductController": {"name": "ProductController","templateType": "code","type": "web"},
+        "Product": {"name": "product","templateType": "code","type": "api"}
+      }
     }
   },
   "dependencies": {
@@ -143,5 +152,21 @@
     "type": "TEXT",
     "description": null,
     "content": "org.acme.demo"
+  },
+  "architectures":{
+    "content": [
+      {"name": "None","id": "none","demos": ["gson","web"]},
+      {"name": "分层结构","id": "layered","content": [
+        {"name": "api","type": "api"},
+        {"name": "service","type": "service","dependencies": ["api"]},
+        {"name": "web","type": "web","dependencies": ["service"]}
+      ],"demos": ["gson","web"]}
+    ]
+  },
+  "demos": {
+    "content" : [
+      {"name": "web基础示例","id": "web","templates": ["mybatis","h2","User","UserController"],"description": "Spring MVC的示例"},
+      {"name": "Gson示例","id": "gson","templates": ["ProductController","Product"],"description": "简单的Gson示例"}
+    ]
   }
 }

@@ -224,6 +224,11 @@ public class InitializrConfiguration {
 		private final Map<String, Repository> repositories = new LinkedHashMap<>();
 
 		/**
+		 * Template 模板文件.
+		 */
+		private final Map<String, Template> templates = new LinkedHashMap<>();
+
+		/**
 		 * Gradle-specific settings.
 		 */
 		@NestedConfigurationProperty
@@ -319,6 +324,10 @@ public class InitializrConfiguration {
 			return this.repositories;
 		}
 
+		public Map<String, Template> getTemplates() {
+			return this.templates;
+		}
+
 		public Gradle getGradle() {
 			return this.gradle;
 		}
@@ -368,6 +377,7 @@ public class InitializrConfiguration {
 			this.platform.merge(other.platform);
 			other.boms.forEach(this.boms::putIfAbsent);
 			other.repositories.forEach(this.repositories::putIfAbsent);
+			other.templates.forEach(this.templates::putIfAbsent);
 		}
 
 		/**

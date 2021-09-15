@@ -177,6 +177,81 @@ class InitializrMetadataTests {
 	}
 
 	@Test
+	void invalidDemoUnknownDependency() {
+		InitializrMetadata metadata = initializeMetadata();
+		Dependency foo = Dependency.withId("foo", "org.acme", "foo");
+		addTestDependencyGroup(metadata, foo);
+		Demo demo = Demo.withId("mybatis", "mybatis", "mybatis测试用例");
+		demo.getDependencies().add("far");
+		addTestDemo(metadata, demo);
+		assertThatExceptionOfType(InvalidInitializrMetadataException.class).isThrownBy(metadata::validate)
+				.withMessageContaining("defines an invalid dependency id far").withMessageContaining("foo");
+	}
+
+	@Test
+	void invalidDemoUnknownTemplate() {
+		InitializrMetadata metadata = initializeMetadata();
+		Template foo = Template.create("mybatis", "code");
+		metadata.getConfiguration().getEnv().getTemplates().put(foo.getName(), foo);
+		Demo demo = Demo.withId("mybatis", "mybatis", "mybatis测试用例");
+		demo.getTemplates().add("gson");
+		addTestDemo(metadata, demo);
+		assertThatExceptionOfType(InvalidInitializrMetadataException.class).isThrownBy(metadata::validate)
+				.withMessageContaining("defines an invalid template id gson").withMessageContaining("mybatis");
+	}
+
+	@Test
+	void invalidArchitectureGroupErrorModule() {
+		InitializrMetadata metadata = initializeMetadata();
+		ArchitectureGroup group = addTestArchitectureGroup(metadata);
+		Module api = Module.create("api", "api");
+		Module service = Module.create("service", "service");
+		service.getDependencies().add("dao");
+		addTestArchitectureGroupWithModule(group, api, service);
+		assertThatExceptionOfType(InvalidInitializrMetadataException.class).isThrownBy(metadata::validate)
+				.withMessageContaining("defines an invalid dependency name dao").withMessageContaining("api")
+				.withMessageContaining("available Module [Module{name='api', type='api', dependencies=[]}]");
+	}
+
+	@Test
+	void invalidArchitectureGroupSelfModule() {
+		InitializrMetadata metadata = initializeMetadata();
+		ArchitectureGroup group = addTestArchitectureGroup(metadata);
+
+		Module api = Module.create("api", "api");
+		Module service = Module.create("service", "service");
+		service.getDependencies().add("service");
+
+		addTestArchitectureGroupWithModule(group, api, service);
+		assertThatExceptionOfType(InvalidInitializrMetadataException.class).isThrownBy(metadata::validate)
+				.withMessageContaining(
+						"defines an dependency name service that is the same as itself, available Module")
+				.withMessageContaining("available Module [Module{name='api', type='api', dependencies=[]}]");
+	}
+
+	@Test
+	void invalidArchitectureGroupUnknowDemo() {
+		InitializrMetadata metadata = initializeMetadata();
+		ArchitectureGroup group = addTestArchitectureGroup(metadata);
+
+		Template foo = Template.create("mybatis", "code");
+		metadata.getConfiguration().getEnv().getTemplates().put(foo.getName(), foo);
+
+		Demo demo = Demo.withId("mybatis", "mybatis", "mybatis测试用例");
+		demo.getTemplates().add("mybatis");
+		addTestDemo(metadata, demo);
+
+		Module api = Module.create("api", "api");
+		Module service = Module.create("service", "service");
+
+		addTestArchitectureGroupWithModule(group, api, service);
+		addTestArchitectureGroupWithDemo(group, "gson");
+		assertThatExceptionOfType(InvalidInitializrMetadataException.class).isThrownBy(metadata::validate)
+				.withMessageContaining("defines an invalid demo id gson").withMessageContaining("available demos ")
+				.withMessageContaining("mybatis");
+	}
+
+	@Test
 	void stripInvalidCharsFromPackage() {
 		InitializrMetadata metadata = initializeMetadata();
 		metadata.getGroupId().setContent("org.acme");
@@ -199,6 +274,28 @@ class InitializrMetadataTests {
 			group.getContent().add(dependency);
 		}
 		metadata.getDependencies().getContent().add(group);
+	}
+
+	private void addTestDemo(InitializrMetadata metadata, Demo... demos) {
+		for (Demo demo : demos) {
+			metadata.getDemos().getContent().add(demo);
+		}
+	}
+
+	private ArchitectureGroup addTestArchitectureGroup(InitializrMetadata metadata) {
+		ArchitectureGroup architectureGroup = ArchitectureGroup.withId("test", "test");
+		metadata.getArchitectures().getContent().add(architectureGroup);
+		return architectureGroup;
+	}
+
+	private void addTestArchitectureGroupWithModule(ArchitectureGroup architectureGroup, Module... modules) {
+		for (Module module : modules) {
+			architectureGroup.getContent().add(module);
+		}
+	}
+
+	private void addTestArchitectureGroupWithDemo(ArchitectureGroup architectureGroup, String... demos) {
+		architectureGroup.getDemos().addAll(Arrays.asList(demos));
 	}
 
 	private Kotlin.Mapping createKotlinVersionMapping(String compatibilityRange, String kotlinVersion) {

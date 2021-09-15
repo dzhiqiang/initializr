@@ -73,6 +73,7 @@ class InitializrMetadataBuilderTests {
 		InitializrMetadata metadata = InitializrMetadataBuilder.create()
 				.withInitializrMetadata(new ClassPathResource("metadata/config/test-min.json")).build();
 		assertThat(metadata.getConfiguration().getEnv().isForceSsl()).isEqualTo(true);
+		assertThat(metadata.getConfiguration().getEnv().getTemplates()).hasSize(6);
 		assertThat(metadata.getDependencies().getContent()).hasSize(1);
 		Dependency dependency = metadata.getDependencies().get("test");
 		assertThat(dependency).isNotNull();
@@ -81,6 +82,19 @@ class InitializrMetadataBuilderTests {
 		assertThat(metadata.getBootVersions().getContent()).hasSize(2);
 		assertThat(metadata.getPackagings().getContent()).hasSize(2);
 		assertThat(metadata.getJavaVersions().getContent()).hasSize(1);
+		assertThat(metadata.getArchitectures().getContent()).hasSize(2);
+		ArchitectureGroup group = metadata.getArchitectures().getGroup("none");
+		assertThat(group).isNotNull();
+		assertThat(group.getName()).isEqualTo("None");
+		Module moduleNull = metadata.getArchitectures().getModule("none", "api");
+		assertThat(moduleNull).isNull();
+		Module moduleNotNull = metadata.getArchitectures().getModule("layered", "service");
+		assertThat(moduleNotNull).isNotNull();
+		assertThat(metadata.getDemos().getContent()).hasSize(2);
+		Demo demo = metadata.getDemos().get("web");
+		assertThat(demo).isNotNull();
+		assertThat(demo.getName()).isEqualTo("web基础示例");
+		assertThat(demo.getDescription()).isEqualTo("Spring MVC的示例");
 		assertThat(metadata.getLanguages().getContent()).hasSize(3);
 		assertThat(metadata.getName().getContent()).isEqualTo("metadata-merge");
 		assertThat(metadata.getDescription().getContent()).isEqualTo("Demo project for metadata merge");
@@ -122,7 +136,6 @@ class InitializrMetadataBuilderTests {
 		assertThat(myRepo.getName()).isEqualTo("my repo");
 		assertThat(myRepo.getUrl()).isEqualTo(new URL("https://example.com/my"));
 		assertThat(myRepo.isSnapshotsEnabled()).isEqualTo(true);
-
 		Repository anotherRepo = repositories.get("another-repo");
 		assertThat(anotherRepo).isNotNull();
 		assertThat(anotherRepo.getName()).isEqualTo("another repo");
@@ -182,9 +195,12 @@ class InitializrMetadataBuilderTests {
 
 	private static void assertDefaultConfig(InitializrMetadata metadata) {
 		assertThat(metadata).isNotNull();
+		assertThat(metadata.getConfiguration().getEnv().getTemplates()).hasSize(6);
 		assertThat(metadata.getDependencies().getAll()).hasSize(8);
 		assertThat(metadata.getDependencies().getContent()).hasSize(2);
 		assertThat(metadata.getTypes().getContent()).hasSize(4);
+		assertThat(metadata.getArchitectures().getContent()).hasSize(2);
+		assertThat(metadata.getDemos().getContent()).hasSize(2);
 	}
 
 	private static InitializrProperties load(Resource resource) {

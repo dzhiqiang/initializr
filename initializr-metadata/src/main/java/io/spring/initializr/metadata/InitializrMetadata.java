@@ -39,6 +39,10 @@ public class InitializrMetadata {
 
 	private final TypeCapability types = new TypeCapability();
 
+	private final DemosCapability demos = new DemosCapability();
+
+	private final ArchitectureGroupCapability architectures = new ArchitectureGroupCapability();
+
 	private final SingleSelectCapability bootVersions = new SingleSelectCapability("bootVersion", "Spring Boot Version",
 			"spring boot version");
 
@@ -99,6 +103,14 @@ public class InitializrMetadata {
 		return this.languages;
 	}
 
+	public ArchitectureGroupCapability getArchitectures() {
+		return this.architectures;
+	}
+
+	public DemosCapability getDemos() {
+		return this.demos;
+	}
+
 	public TextCapability getName() {
 		return this.name;
 	}
@@ -135,6 +147,8 @@ public class InitializrMetadata {
 		this.packagings.merge(other.packagings);
 		this.javaVersions.merge(other.javaVersions);
 		this.languages.merge(other.languages);
+		this.architectures.merge(other.architectures);
+		this.demos.merge(other.demos);
 		this.name.merge(other.name);
 		this.description.merge(other.description);
 		this.groupId.merge(other.groupId);
@@ -149,9 +163,12 @@ public class InitializrMetadata {
 	public void validate() {
 		this.configuration.validate();
 		this.dependencies.validate();
+		this.architectures.validate();
+		this.demos.validate();
 
 		Map<String, Repository> repositories = this.configuration.getEnv().getRepositories();
 		Map<String, BillOfMaterials> boms = this.configuration.getEnv().getBoms();
+		Map<String, Template> templates = this.configuration.getEnv().getTemplates();
 		for (Dependency dependency : this.dependencies.getAll()) {
 			if (dependency.getBom() != null && !boms.containsKey(dependency.getBom())) {
 				throw new InvalidInitializrMetadataException("Dependency " + dependency + "defines an invalid BOM id "
@@ -163,6 +180,7 @@ public class InitializrMetadata {
 						"Dependency " + dependency + "defines an invalid repository id " + dependency.getRepository()
 								+ ", available repositories " + repositories);
 			}
+
 		}
 		for (BillOfMaterials bom : boms.values()) {
 			for (String r : bom.getRepositories()) {
@@ -193,6 +211,51 @@ public class InitializrMetadata {
 				}
 			}
 		}
+
+		for (Demo demo : this.demos.getContent()) {
+			for (String dependencyId : demo.getDependencies()) {
+				if (this.dependencies.get(dependencyId) == null) {
+					throw new InvalidInitializrMetadataException("Demo " + demo + "defines an invalid dependency id "
+							+ dependencyId + ", available dependencies " + this.dependencies.getAll());
+				}
+			}
+
+			for (String templateId : demo.getTemplates()) {
+				if (!templates.containsKey(templateId)) {
+					throw new InvalidInitializrMetadataException("Demo " + demo + "defines an invalid template id "
+							+ templateId + ", available templates " + templates);
+				}
+			}
+		}
+
+		for (ArchitectureGroup architectureGroup : this.architectures.getContent()) {
+			for (Module module : architectureGroup.getContent()) {
+				for (String dependencyName : module.getDependencies()) {
+					if (module.getName().equals(dependencyName)) {
+						throw new InvalidInitializrMetadataException("Module " + module + "defines an dependency name "
+								+ dependencyName + " that is the same as itself, available Module "
+								+ architectureGroup.getContent().stream()
+										.filter((it) -> !it.getName().equals(module.getName()))
+										.collect(Collectors.toList()));
+					}
+					if (architectureGroup.getModuleByName(dependencyName) == null) {
+						throw new InvalidInitializrMetadataException("Module " + module
+								+ "defines an invalid dependency name " + dependencyName + ", available Module "
+								+ architectureGroup.getContent().stream()
+										.filter((it) -> !it.getName().equals(module.getName()))
+										.collect(Collectors.toList()));
+					}
+				}
+			}
+
+			for (String demoId : architectureGroup.getDemos()) {
+				if (this.demos.get(demoId) == null) {
+					throw new InvalidInitializrMetadataException("ArchitectureGroup " + architectureGroup
+							+ "defines an invalid demo id " + demoId + ", available demos " + this.demos.getContent());
+				}
+			}
+		}
+
 	}
 
 	/**
@@ -251,6 +314,7 @@ public class InitializrMetadata {
 		defaults.put("name", this.name.getContent());
 		defaults.put("description", this.description.getContent());
 		defaults.put("packageName", this.packageName.getContent());
+		defaults.put("architecture", this.architectures.getContent());
 		return defaults;
 	}
 

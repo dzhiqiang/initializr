@@ -104,6 +104,18 @@ public class InitializrProperties extends InitializrConfiguration {
 	@JsonIgnore
 	private final SimpleElement packageName = new SimpleElement(null);
 
+	/**
+	 * Architecture metadata.
+	 */
+	@JsonIgnore
+	private final List<ArchitectureGroup> architectures = new ArrayList<>();
+
+	/**
+	 * Demo metadata.
+	 */
+	@JsonIgnore
+	private final List<Demo> demos = new ArrayList<>();
+
 	public List<DependencyGroup> getDependencies() {
 		return this.dependencies;
 	}
@@ -150,6 +162,14 @@ public class InitializrProperties extends InitializrConfiguration {
 
 	public SimpleElement getPackageName() {
 		return this.packageName;
+	}
+
+	public List<ArchitectureGroup> getArchitectures() {
+		return this.architectures;
+	}
+
+	public List<Demo> getDemos() {
+		return this.demos;
 	}
 
 	/**
