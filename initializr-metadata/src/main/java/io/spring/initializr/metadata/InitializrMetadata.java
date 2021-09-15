@@ -212,14 +212,17 @@ public class InitializrMetadata {
 			}
 		}
 
-		for (Demo demo : this.demos.getContent()) {
-			for (String dependencyId : demo.getDependencies()) {
+		for (Template template : templates.values()) {
+			for (String dependencyId : template.getDependencies()) {
 				if (this.dependencies.get(dependencyId) == null) {
-					throw new InvalidInitializrMetadataException("Demo " + demo + "defines an invalid dependency id "
-							+ dependencyId + ", available dependencies " + this.dependencies.getAll());
+					throw new InvalidInitializrMetadataException(
+							"Template " + template + "defines an invalid dependency id " + dependencyId
+									+ ", available dependencies " + this.dependencies.getAll());
 				}
 			}
+		}
 
+		for (Demo demo : this.demos.getContent()) {
 			for (String templateId : demo.getTemplates()) {
 				if (!templates.containsKey(templateId)) {
 					throw new InvalidInitializrMetadataException("Demo " + demo + "defines an invalid template id "

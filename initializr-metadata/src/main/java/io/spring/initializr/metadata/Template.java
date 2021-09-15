@@ -16,6 +16,7 @@
 
 package io.spring.initializr.metadata;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +38,8 @@ public class Template {
 	private String templateType;
 
 	private String type;
+
+	private List<String> dependencies = new ArrayList<>();
 
 	/**
 	 * All TemplateType.
@@ -70,6 +73,14 @@ public class Template {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public List<String> getDependencies() {
+		return this.dependencies;
+	}
+
+	public void setDependencies(List<String> dependencies) {
+		this.dependencies = dependencies;
 	}
 
 	@Override

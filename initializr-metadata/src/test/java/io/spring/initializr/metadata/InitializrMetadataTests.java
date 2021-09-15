@@ -177,15 +177,15 @@ class InitializrMetadataTests {
 	}
 
 	@Test
-	void invalidDemoUnknownDependency() {
+	void invalidTemplateUnknownDependency() {
 		InitializrMetadata metadata = initializeMetadata();
-		Dependency foo = Dependency.withId("foo", "org.acme", "foo");
+		Template template = Template.create("mybatis", "code");
+		template.getDependencies().add("test");
+		Dependency foo = Dependency.withId("mybatis", "org.ibatis", "ibatis");
 		addTestDependencyGroup(metadata, foo);
-		Demo demo = Demo.withId("mybatis", "mybatis", "mybatis测试用例");
-		demo.getDependencies().add("far");
-		addTestDemo(metadata, demo);
+		metadata.getConfiguration().getEnv().getTemplates().put(template.getName(), template);
 		assertThatExceptionOfType(InvalidInitializrMetadataException.class).isThrownBy(metadata::validate)
-				.withMessageContaining("defines an invalid dependency id far").withMessageContaining("foo");
+				.withMessageContaining("defines an invalid dependency id test").withMessageContaining("mybatis");
 	}
 
 	@Test

@@ -34,8 +34,6 @@ public class Demo {
 
 	private String description;
 
-	private List<String> dependencies = new ArrayList<>();
-
 	private List<String> templates = new ArrayList<>();
 
 	public String getName() {
@@ -60,14 +58,6 @@ public class Demo {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public List<String> getDependencies() {
-		return this.dependencies;
-	}
-
-	public void setDependencies(List<String> dependencies) {
-		this.dependencies = dependencies;
 	}
 
 	public List<String> getTemplates() {
