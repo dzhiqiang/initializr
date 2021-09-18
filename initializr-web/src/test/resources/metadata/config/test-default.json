@@ -136,7 +136,13 @@
         "version": "1.0.0.RELEASE"
       }
     },
-    "springBootMetadataUrl": "https://spring.io/project_metadata/spring-boot"
+    "springBootMetadataUrl": "https://spring.io/project_metadata/spring-boot",
+    "templates": {"mybatis": {"name": "mybatis","templateType": "code","type": "dao","dependencies": []},
+                  "h2": {"name": "h2","templateType": "static","type": "dao","dependencies": []},
+                  "User": {"name": "user","templateType": "code","type": "api","dependencies": []},
+                  "UserController": {"name": "UserController","templateType": "code","type": "web","dependencies": []},
+                  "ProductController": {"name": "ProductController","templateType": "code","type": "web","dependencies": []},
+                  "Product": {"name": "product","templateType": "code","type": "api","dependencies": []}}
   }},
   "dependencies": {
     "content": [
@@ -409,5 +415,21 @@
     "id": "version",
     "title": "Version",
     "type": "TEXT"
+  },
+  "demos" : {
+    "id": "demo",
+    "type": "HIERARCHICAL_MULTI_SELECT",
+    "title": "Demo",
+    "description": "project demo",
+    "content": [{"name": "web基础示例","id": "web","templates": ["mybatis","h2","User","UserController"],"description": "Spring MVC的示例"},
+      {"name": "Gson示例","id": "gson","templates": ["ProductController","Product"],"description": "简单的Gson示例"}]
+  },
+  "architectures": {
+    "id": "architecture",
+    "type": "SINGLE_SELECT",
+    "title": "Project Architecture",
+    "description": "architecture",
+    "content":[{"name": "None","id": "none","demos": ["web","gson"],"content": []},
+              {"name": "分层结构","id": "layered","demos": ["web","gson"],"content": [{"name":"api","type": "api","dependencies": []},{"name":"service","type": "service","dependencies": ["api"]}]}]
   }
 }

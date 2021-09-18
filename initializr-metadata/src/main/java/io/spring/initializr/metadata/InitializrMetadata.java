@@ -317,7 +317,6 @@ public class InitializrMetadata {
 		defaults.put("name", this.name.getContent());
 		defaults.put("description", this.description.getContent());
 		defaults.put("packageName", this.packageName.getContent());
-		defaults.put("architecture", this.architectures.getContent());
 		return defaults;
 	}
 

@@ -16,7 +16,10 @@
 
 package io.spring.initializr.generator.architecture.none;
 
+import java.util.List;
+
 import io.spring.initializr.generator.architecture.Architecture;
+import io.spring.initializr.generator.architecture.Module;
 
 /**
  * None {@link Architecture}.
@@ -43,6 +46,11 @@ public class NoneArchitecture implements Architecture {
 	@Override
 	public boolean isMultiModule() {
 		return MULTI_MODULE;
+	}
+
+	@Override
+	public List<Module> modules() {
+		return null;
 	}
 
 }

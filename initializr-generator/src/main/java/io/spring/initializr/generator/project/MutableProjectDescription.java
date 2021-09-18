@@ -23,6 +23,7 @@ import java.util.Map;
 import io.spring.initializr.generator.architecture.Architecture;
 import io.spring.initializr.generator.buildsystem.BuildSystem;
 import io.spring.initializr.generator.buildsystem.Dependency;
+import io.spring.initializr.generator.demo.Demo;
 import io.spring.initializr.generator.language.Language;
 import io.spring.initializr.generator.packaging.Packaging;
 import io.spring.initializr.generator.version.Version;
@@ -65,6 +66,8 @@ public class MutableProjectDescription implements ProjectDescription {
 
 	private Architecture architecture;
 
+	private Map<String, Demo> demos = new LinkedHashMap<>();
+
 	public MutableProjectDescription() {
 	}
 
@@ -87,6 +90,7 @@ public class MutableProjectDescription implements ProjectDescription {
 		this.packageName = source.getPackageName();
 		this.baseDirectory = source.getBaseDirectory();
 		this.architecture = source.getArchitecture();
+		this.demos.putAll(source.getDemos());
 	}
 
 	@Override
@@ -232,6 +236,18 @@ public class MutableProjectDescription implements ProjectDescription {
 
 	public void setArchitecture(Architecture architecture) {
 		this.architecture = architecture;
+	}
+
+	public Map<String, Demo> getDemos() {
+		return this.demos;
+	}
+
+	public void setDemos(Map<String, Demo> demos) {
+		this.demos = demos;
+	}
+
+	public void addDemo(String id, Demo demo) {
+		this.demos.put(id, demo);
 	}
 
 }

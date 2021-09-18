@@ -16,7 +16,11 @@
 
 package io.spring.initializr.generator.architecture.layered;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.spring.initializr.generator.architecture.Architecture;
+import io.spring.initializr.generator.architecture.Module;
 
 /**
  * Layered {@link Architecture}.
@@ -35,6 +39,8 @@ public class LayeredArchitecture implements Architecture {
 	 */
 	public static final boolean MULTI_MODULE = true;
 
+	private List<Module> modules = new ArrayList<>();
+
 	@Override
 	public String id() {
 		return ID;
@@ -43,6 +49,15 @@ public class LayeredArchitecture implements Architecture {
 	@Override
 	public boolean isMultiModule() {
 		return MULTI_MODULE;
+	}
+
+	@Override
+	public List<Module> modules() {
+		return this.modules;
+	}
+
+	public void addModule(String name, List<String> dependencies) {
+		this.modules.add(new Module.ModuleBuild(name).dependency(dependencies).build());
 	}
 
 }

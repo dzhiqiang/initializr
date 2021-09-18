@@ -39,6 +39,31 @@ initializr:
       my-api-repo-3:
         name: repo3
         url: https://example.com/repo3
+    templates:
+      mybatis:
+        name: mybatis
+        templateType: code
+        type: dao
+      h2:
+        name: h2
+        templateType: static
+        type: dao
+      User:
+        name: user
+        templateType: code
+        type: api
+      UserController:
+        name: UserController
+        templateType: code
+        type: web
+      ProductController:
+        name: ProductController
+        templateType: code
+        type: web
+      Product:
+        name: product
+        templateType: code
+        type: api
   dependencies:
     - name: Core
       content:
@@ -160,7 +185,39 @@ initializr:
     - name: 2.3.10
       id: 2.3.10.RELEASE
       default: false
-
+  architectures:
+    - name: None
+      id: none
+      demos:
+        - web
+        - gson
+    - name: 分层结构
+      id: layered
+      content:
+        - name: api
+          type: api
+        - name: service
+          type: service
+          dependencies:
+            - api
+      demos:
+        - web
+        - gson
+  demos:
+    - name: web基础示例
+      id: web
+      templates:
+        - mybatis
+        - h2
+        - User
+        - UserController
+      description: Spring MVC的示例
+    - name: Gson示例
+      id: gson
+      templates:
+        - ProductController
+        - Product
+      description: 简单的Gson示例
 server:
   error:
     include-message: always

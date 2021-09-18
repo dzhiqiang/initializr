@@ -19,9 +19,12 @@ package io.spring.initializr.generator.test;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 
+import io.spring.initializr.metadata.ArchitectureGroup;
 import io.spring.initializr.metadata.BillOfMaterials;
 import io.spring.initializr.metadata.DefaultMetadataElement;
+import io.spring.initializr.metadata.Demo;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.DependencyGroup;
 import io.spring.initializr.metadata.InitializrConfiguration.Env.Kotlin;
@@ -29,7 +32,9 @@ import io.spring.initializr.metadata.InitializrConfiguration.Env.Maven.ParentPom
 import io.spring.initializr.metadata.InitializrConfiguration.Platform;
 import io.spring.initializr.metadata.InitializrMetadata;
 import io.spring.initializr.metadata.InitializrMetadataBuilder;
+import io.spring.initializr.metadata.Module;
 import io.spring.initializr.metadata.Repository;
+import io.spring.initializr.metadata.Template;
 import io.spring.initializr.metadata.Type;
 
 import org.springframework.util.StringUtils;
@@ -252,6 +257,31 @@ public class InitializrMetadataTestBuilder {
 			repo.setReleasesEnabled(releasesEnabled);
 			repo.setSnapshotsEnabled(snapshotsEnabled);
 			it.getConfiguration().getEnv().getRepositories().put(id, repo);
+		});
+		return this;
+	}
+
+	public InitializrMetadataTestBuilder addTemplate(String name, String templateType, String type) {
+		this.builder.withCustomizer((it) -> {
+			Template template = Template.create(name, templateType, type);
+			it.getConfiguration().getEnv().getTemplates().put(template.getName(), template);
+		});
+		return this;
+	}
+
+	public InitializrMetadataTestBuilder addArchitecture(String id, String name, Module... modules) {
+		this.builder.withCustomizer((it) -> {
+			ArchitectureGroup architectureGroup = ArchitectureGroup.withId(id, name, modules);
+			it.getArchitectures().merge(Arrays.asList(architectureGroup));
+		});
+		return this;
+	}
+
+	public InitializrMetadataTestBuilder addDemo(String id, String name, String description, List<String> templates) {
+		this.builder.withCustomizer((it) -> {
+			Demo demo = Demo.withId(id, name, description);
+			demo.setTemplates(templates);
+			it.getDemos().merge(Arrays.asList(demo));
 		});
 		return this;
 	}

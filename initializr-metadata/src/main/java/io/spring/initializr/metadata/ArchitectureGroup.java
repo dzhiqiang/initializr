@@ -17,6 +17,7 @@
 package io.spring.initializr.metadata;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +128,14 @@ public class ArchitectureGroup {
 		ArchitectureGroup architectureGroup = new ArchitectureGroup();
 		architectureGroup.setId(id);
 		architectureGroup.setName(name);
+		return architectureGroup;
+	}
+
+	public static ArchitectureGroup withId(String id, String name, Module... modules) {
+		ArchitectureGroup architectureGroup = new ArchitectureGroup();
+		architectureGroup.setId(id);
+		architectureGroup.setName(name);
+		architectureGroup.getContent().addAll(Arrays.asList(modules));
 		return architectureGroup;
 	}
 

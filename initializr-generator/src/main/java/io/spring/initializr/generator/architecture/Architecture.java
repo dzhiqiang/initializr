@@ -16,6 +16,7 @@
 
 package io.spring.initializr.generator.architecture;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.core.io.support.SpringFactoriesLoader;
@@ -34,6 +35,12 @@ public interface Architecture {
 	 * @return none:false,layered返回true
 	 */
 	boolean isMultiModule();
+
+	/**
+	 * 返回所有子项目.
+	 * @return 子项目
+	 */
+	List<Module> modules();
 
 	static Architecture forId(String id) {
 		return SpringFactoriesLoader.loadFactories(ArchitectureFactory.class, Architecture.class.getClassLoader())

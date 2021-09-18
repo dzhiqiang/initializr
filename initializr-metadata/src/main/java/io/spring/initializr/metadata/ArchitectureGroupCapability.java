@@ -44,7 +44,7 @@ public class ArchitectureGroupCapability extends ServiceCapability<List<Architec
 	}
 
 	public ArchitectureGroupCapability() {
-		super("architectureGroup", ServiceCapabilityType.SINGLE_SELECT, "Project Architecture", "architecture");
+		super("architecture", ServiceCapabilityType.SINGLE_SELECT, "Project Architecture", "architecture");
 	}
 
 	@Override

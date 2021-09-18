@@ -21,6 +21,7 @@ import java.util.Map;
 import io.spring.initializr.generator.architecture.Architecture;
 import io.spring.initializr.generator.buildsystem.BuildSystem;
 import io.spring.initializr.generator.buildsystem.Dependency;
+import io.spring.initializr.generator.demo.Demo;
 import io.spring.initializr.generator.language.Language;
 import io.spring.initializr.generator.packaging.Packaging;
 import io.spring.initializr.generator.version.Version;
@@ -126,5 +127,11 @@ public interface ProjectDescription {
 	 * @return 架构
 	 */
 	Architecture getArchitecture();
+
+	/**
+	 * 返回选择的示例或者{@code null}.
+	 * @return 架构
+	 */
+	Map<String, Demo> getDemos();
 
 }
