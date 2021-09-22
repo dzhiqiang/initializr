@@ -73,4 +73,41 @@ public class Demo {
 		this.template.put(template.getId(), template);
 	}
 
+	public static class DemoBuilder {
+
+		private String id;
+
+		private String name;
+
+		private String description;
+
+		private Map<String, Template> template = new HashMap<>();
+
+		public DemoBuilder(String id, String name, String description) {
+			this.id = id;
+			this.name = name;
+			this.description = description;
+		}
+
+		public DemoBuilder templates(Map<String, Template> template) {
+			this.template = template;
+			return this;
+		}
+
+		public DemoBuilder addTemplate(Template template) {
+			this.template.put(template.getId(), template);
+			return this;
+		}
+
+		public Demo build() {
+			Demo demo = new Demo();
+			demo.setId(this.id);
+			demo.setName(this.name);
+			demo.setDescription(this.description);
+			demo.setTemplate(this.template);
+			return demo;
+		}
+
+	}
+
 }

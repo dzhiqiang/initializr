@@ -57,6 +57,10 @@ public class ProjectRequest {
 	// The base directory to create in the archive - no baseDir by default
 	private String baseDir;
 
+	private String architecture;
+
+	private List<String> demos = new ArrayList<>();
+
 	public List<String> getDependencies() {
 		return this.dependencies;
 	}
@@ -173,6 +177,22 @@ public class ProjectRequest {
 
 	public void setBaseDir(String baseDir) {
 		this.baseDir = baseDir;
+	}
+
+	public String getArchitecture() {
+		return this.architecture;
+	}
+
+	public void setArchitecture(String architecture) {
+		this.architecture = architecture;
+	}
+
+	public List<String> getDemos() {
+		return this.demos;
+	}
+
+	public void setDemos(List<String> demos) {
+		this.demos = demos;
 	}
 
 }

@@ -51,11 +51,6 @@ public class LayeredArchitecture implements Architecture {
 		return MULTI_MODULE;
 	}
 
-	@Override
-	public List<Module> modules() {
-		return this.modules;
-	}
-
 	public void addModule(String name, List<String> dependencies) {
 		this.modules.add(new Module.ModuleBuild(name).dependency(dependencies).build());
 	}

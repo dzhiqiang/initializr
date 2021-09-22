@@ -429,7 +429,7 @@
     "type": "SINGLE_SELECT",
     "title": "Project Architecture",
     "description": "architecture",
-    "content":[{"name": "None","id": "none","demos": ["web","gson"],"content": []},
-              {"name": "分层结构","id": "layered","demos": ["web","gson"],"content": [{"name":"api","type": "api","dependencies": []},{"name":"service","type": "service","dependencies": ["api"]}]}]
+    "content":[{"default": true,"name": "None","id": "none","demos": ["web","gson"],"content": []},
+              {"default": false,"name": "分层结构","id": "layered","demos": ["web","gson"],"content": [{"name":"api","type": "api","dependencies": []},{"name":"service","type": "service","dependencies": ["api"]}]}]
   }
 }

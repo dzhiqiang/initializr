@@ -23,7 +23,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ArchitectureGroupCapability extends ServiceCapability<List<ArchitectureGroup>> {
+public class ArchitectureGroupCapability extends ServiceCapability<List<ArchitectureGroup>>
+		implements Defaultable<ArchitectureGroup> {
 
 	final List<ArchitectureGroup> content = new ArrayList<>();
 
@@ -36,11 +37,7 @@ public class ArchitectureGroupCapability extends ServiceCapability<List<Architec
 	}
 
 	public ArchitectureGroup getGroup(String id) {
-		ArchitectureGroup group = this.contentMap.get(id);
-		if (group == null) {
-			group = this.contentMap.get("none");
-		}
-		return group;
+		return this.contentMap.get(id);
 	}
 
 	public ArchitectureGroupCapability() {
@@ -82,6 +79,12 @@ public class ArchitectureGroupCapability extends ServiceCapability<List<Architec
 
 	public void validate() {
 		this.content.forEach((group) -> group.validate());
+		index();
+	}
+
+	@Override
+	public ArchitectureGroup getDefault() {
+		return this.content.stream().filter(DefaultMetadataElement::isDefault).findFirst().orElse(null);
 	}
 
 }

@@ -311,6 +311,7 @@ public class InitializrMetadata {
 		defaults.put("packaging", defaultId(this.packagings));
 		defaults.put("javaVersion", defaultId(this.javaVersions));
 		defaults.put("language", defaultId(this.languages));
+		defaults.put("architecture", defaultId(this.architectures));
 		defaults.put("groupId", this.groupId.getContent());
 		defaults.put("artifactId", this.artifactId.getContent());
 		defaults.put("version", this.version.getContent());

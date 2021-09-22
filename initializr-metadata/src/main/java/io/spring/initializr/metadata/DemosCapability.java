@@ -69,6 +69,7 @@ public class DemosCapability extends ServiceCapability<List<Demo>> {
 
 	public void validate() {
 		this.content.forEach((demo) -> demo.validate());
+		index();
 	}
 
 }

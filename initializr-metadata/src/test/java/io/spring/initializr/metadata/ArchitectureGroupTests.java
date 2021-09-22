@@ -22,20 +22,6 @@ import org.junit.jupiter.api.Test;
 public class ArchitectureGroupTests {
 
 	@Test
-	void invalidNameNull() {
-		ArchitectureGroup group = ArchitectureGroup.withId("test", null);
-		Assertions.assertThatExceptionOfType(InvalidInitializrMetadataException.class)
-				.isThrownBy(() -> group.validate()).withMessageContaining("ArchitectureGroup requires name");
-	}
-
-	@Test
-	void invalidNameEmpty() {
-		ArchitectureGroup group = ArchitectureGroup.withId("test", "");
-		Assertions.assertThatExceptionOfType(InvalidInitializrMetadataException.class)
-				.isThrownBy(() -> group.validate()).withMessageContaining("ArchitectureGroup requires name");
-	}
-
-	@Test
 	void invalidIdNull() {
 		ArchitectureGroup group = ArchitectureGroup.withId(null, "test");
 		Assertions.assertThatExceptionOfType(InvalidInitializrMetadataException.class)

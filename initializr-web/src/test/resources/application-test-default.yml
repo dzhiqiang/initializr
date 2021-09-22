@@ -191,6 +191,7 @@ initializr:
       demos:
         - web
         - gson
+      default: true
     - name: 分层结构
       id: layered
       content:
@@ -203,6 +204,7 @@ initializr:
       demos:
         - web
         - gson
+      default: false
   demos:
     - name: web基础示例
       id: web

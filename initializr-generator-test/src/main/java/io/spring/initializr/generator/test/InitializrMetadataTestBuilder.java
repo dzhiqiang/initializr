@@ -90,7 +90,7 @@ public class InitializrMetadataTestBuilder {
 
 	public InitializrMetadataTestBuilder addBasicDefaults() {
 		return addDefaultTypes().addDefaultPackagings().addDefaultJavaVersions().addDefaultLanguages()
-				.addDefaultBootVersions();
+				.addDefaultBootVersions().addDefaultArchitectures();
 	}
 
 	public InitializrMetadataTestBuilder addDefaultTypes() {
@@ -178,6 +178,17 @@ public class InitializrMetadataTestBuilder {
 			element.setName(id);
 			element.setDefault(defaultValue);
 			it.getBootVersions().addContent(element);
+		});
+		return this;
+	}
+
+	public InitializrMetadataTestBuilder addDefaultArchitectures() {
+		this.builder.withCustomizer((it) -> {
+			ArchitectureGroup architectureGroup = new ArchitectureGroup();
+			architectureGroup.setId("none");
+			architectureGroup.setName("None");
+			architectureGroup.setDefault(true);
+			it.getArchitectures().getContent().add(architectureGroup);
 		});
 		return this;
 	}

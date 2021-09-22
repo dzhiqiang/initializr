@@ -31,11 +31,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Duan Zhiqiang
  */
-public class ArchitectureGroup {
-
-	private String name;
-
-	private String id;
+public class ArchitectureGroup extends DefaultMetadataElement {
 
 	private List<Module> content = new ArrayList<>();
 
@@ -46,22 +42,6 @@ public class ArchitectureGroup {
 
 	@JsonIgnore
 	private Map<String, Module> nameModule = new HashMap<>();
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public List<Module> getContent() {
 		return this.content;
@@ -121,7 +101,7 @@ public class ArchitectureGroup {
 
 	@Override
 	public String toString() {
-		return "ArchitectureGroup{" + "name='" + this.name + '\'' + ", id='" + this.id + '\'' + '}';
+		return super.toString();
 	}
 
 	public static ArchitectureGroup withId(String id, String name) {
@@ -141,10 +121,7 @@ public class ArchitectureGroup {
 
 	public void validate() {
 
-		if (!StringUtils.hasText(this.name)) {
-			throw new InvalidInitializrMetadataException("ArchitectureGroup requires name");
-		}
-		if (!StringUtils.hasText(this.id)) {
+		if (!StringUtils.hasText(this.getId())) {
 			throw new InvalidInitializrMetadataException("ArchitectureGroup requires id");
 		}
 

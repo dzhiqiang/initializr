@@ -16,6 +16,7 @@
 
 package io.spring.initializr.generator.demo;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.spring.initializr.generator.buildsystem.Dependency;
@@ -79,6 +80,47 @@ public class Template {
 		template.setName(name);
 		template.setTemplateType(templateType);
 		return template;
+	}
+
+	public static class TemplateBuilder {
+
+		private String id;
+
+		private String name;
+
+		private String templateType;
+
+		private String module;
+
+		private Map<String, Dependency> dependencies = new HashMap<>();
+
+		public TemplateBuilder(String id, String name, String templateType, String module) {
+			this.id = id;
+			this.name = name;
+			this.templateType = templateType;
+			this.module = module;
+		}
+
+		public TemplateBuilder dependencies(Map<String, Dependency> dependencies) {
+			this.dependencies = dependencies;
+			return this;
+		}
+
+		public TemplateBuilder addDependency(String id, Dependency dependency) {
+			this.dependencies.put(id, dependency);
+			return this;
+		}
+
+		public Template build() {
+			Template template = new Template();
+			template.setId(this.id);
+			template.setName(this.name);
+			template.setModule(this.module);
+			template.setTemplateType(this.templateType);
+			template.setDependencies(this.dependencies);
+			return template;
+		}
+
 	}
 
 }
