@@ -17,6 +17,7 @@
 package io.spring.initializr.metadata;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.util.StringUtils;
@@ -68,6 +69,14 @@ public class Module {
 		Module module = new Module();
 		module.setName(name);
 		module.setType(type);
+		return module;
+	}
+
+	public static Module createWithDependencies(String name, String type, String... dependencies) {
+		Module module = new Module();
+		module.setName(name);
+		module.setType(type);
+		module.getDependencies().addAll(Arrays.asList(dependencies));
 		return module;
 	}
 

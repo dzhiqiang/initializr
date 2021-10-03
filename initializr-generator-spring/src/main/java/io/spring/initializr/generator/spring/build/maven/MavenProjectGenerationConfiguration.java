@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import io.spring.initializr.generator.buildsystem.BuildItemResolver;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuild;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuildSystem;
+import io.spring.initializr.generator.condition.ConditionalOnArchitectureMulti;
 import io.spring.initializr.generator.condition.ConditionalOnBuildSystem;
 import io.spring.initializr.generator.condition.ConditionalOnPackaging;
 import io.spring.initializr.generator.io.IndentingWriterFactory;
@@ -38,6 +39,7 @@ import org.springframework.context.annotation.Bean;
  * Maven as its build system.
  *
  * @author Andy Wilkinson
+ * @author Duan Zhiqiang
  */
 @ProjectGenerationConfiguration
 @ConditionalOnBuildSystem(MavenBuildSystem.ID)
@@ -67,6 +69,13 @@ public class MavenProjectGenerationConfiguration {
 	public MavenBuildProjectContributor mavenBuildProjectContributor(MavenBuild build,
 			IndentingWriterFactory indentingWriterFactory) {
 		return new MavenBuildProjectContributor(build, indentingWriterFactory);
+	}
+
+	@Bean
+	@ConditionalOnArchitectureMulti(true)
+	public ArchitectureMavenBuildProjectContributor architectureMavenBuildProjectContributor(MavenBuild build,
+			IndentingWriterFactory indentingWriterFactory) {
+		return new ArchitectureMavenBuildProjectContributor(build, indentingWriterFactory);
 	}
 
 	@Bean

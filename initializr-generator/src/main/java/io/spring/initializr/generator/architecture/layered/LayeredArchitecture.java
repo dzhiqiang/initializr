@@ -55,4 +55,9 @@ public class LayeredArchitecture implements Architecture {
 		this.modules.add(new Module.ModuleBuild(name).dependency(dependencies).build());
 	}
 
+	@Override
+	public String toString() {
+		return id();
+	}
+
 }

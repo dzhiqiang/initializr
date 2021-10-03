@@ -167,6 +167,20 @@
       }
     ]
   },
+  "architecture": {
+    "type": "single-select",
+    "default": "none",
+    "values": [
+      {
+        "id": "none",
+        "name": "None"
+      },
+      {
+        "id": "layered",
+        "name": "分层结构"
+      }
+    ]
+  },
   "groupId": {
     "type": "text",
     "default": "com.example"

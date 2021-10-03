@@ -20,6 +20,7 @@ import io.spring.initializr.generator.buildsystem.Build;
 import io.spring.initializr.generator.buildsystem.Dependency;
 import io.spring.initializr.generator.buildsystem.Dependency.Exclusion;
 import io.spring.initializr.generator.buildsystem.DependencyScope;
+import io.spring.initializr.generator.condition.ConditionalOnArchitectureMulti;
 import io.spring.initializr.generator.condition.ConditionalOnPackaging;
 import io.spring.initializr.generator.condition.ConditionalOnPlatformVersion;
 import io.spring.initializr.generator.packaging.war.WarPackaging;
@@ -27,7 +28,10 @@ import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.ProjectGenerationConfiguration;
 import io.spring.initializr.generator.project.ProjectGlobalModel;
 import io.spring.initializr.generator.spring.architecture.ArchitectureMetadataResolver;
+import io.spring.initializr.generator.spring.build.maven.ArchitectureMavenBuildCustomizer;
+import io.spring.initializr.generator.spring.build.maven.ArchitectureStartMavenBuildCustomizer;
 import io.spring.initializr.generator.spring.build.maven.DefaultMavenBuildCustomizer;
+import io.spring.initializr.generator.spring.build.maven.DemoMavenBuildCustomizer;
 import io.spring.initializr.metadata.InitializrMetadata;
 
 import org.springframework.context.annotation.Bean;
@@ -99,6 +103,24 @@ public class BuildProjectGenerationConfiguration {
 	@Bean
 	public SpringBootVersionRepositoriesBuildCustomizer repositoriesBuilderCustomizer(ProjectDescription description) {
 		return new SpringBootVersionRepositoriesBuildCustomizer(description.getPlatformVersion());
+	}
+
+	@Bean
+	@ConditionalOnArchitectureMulti(true)
+	public ArchitectureMavenBuildCustomizer architectureBuildCustomizer(ProjectDescription description,
+			ArchitectureMetadataResolver resolver) {
+		return new ArchitectureMavenBuildCustomizer(description, resolver);
+	}
+
+	@Bean
+	@ConditionalOnArchitectureMulti(true)
+	public ArchitectureStartMavenBuildCustomizer architectureStartMavenBuildCustomizer() {
+		return new ArchitectureStartMavenBuildCustomizer();
+	}
+
+	@Bean
+	public DemoMavenBuildCustomizer demoMavenBuildCustomizer(ProjectDescription description) {
+		return new DemoMavenBuildCustomizer(description);
 	}
 
 }

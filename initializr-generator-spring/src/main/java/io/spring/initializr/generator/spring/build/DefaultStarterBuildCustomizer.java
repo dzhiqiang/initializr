@@ -53,7 +53,7 @@ class DefaultStarterBuildCustomizer implements BuildCustomizer<Build> {
 
 	@Override
 	public int getOrder() {
-		return Ordered.LOWEST_PRECEDENCE;
+		return Ordered.LOWEST_PRECEDENCE - 1;
 	}
 
 	private boolean isValidStarter(Dependency dependency) {

@@ -32,12 +32,9 @@ class OnArchitectureMultiCondition extends ProjectGenerationCondition {
 	@Override
 	protected boolean matches(ProjectDescription description, ConditionContext context,
 			AnnotatedTypeMetadata metadata) {
-		if (description.getArchitecture() == null) {
-			return false;
-		}
 		boolean multi = (boolean) metadata.getAllAnnotationAttributes(ConditionalOnArchitectureMulti.class.getName())
 				.getFirst("value");
-		return !description.getArchitecture().isMultiModule() ^ multi;
+		return !((description.getArchitecture() != null && description.getArchitecture().isMultiModule()) ^ multi);
 	}
 
 }

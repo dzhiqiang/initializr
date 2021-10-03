@@ -26,6 +26,7 @@ import io.spring.initializr.generator.buildsystem.maven.MavenBuildSettings.Build
  *
  * @author Andy Wilkinson
  * @author Stephane Nicoll
+ * @author Duan Zhiqiang
  */
 public class MavenBuild extends Build {
 
@@ -41,9 +42,12 @@ public class MavenBuild extends Build {
 
 	private final MavenProfileContainer profiles;
 
+	private final MavenModuleContainer modules;
+
 	public MavenBuild(BuildItemResolver buildItemResolver) {
 		super(buildItemResolver);
 		this.profiles = new MavenProfileContainer(determineBuildItemResolver(buildItemResolver));
+		this.modules = new MavenModuleContainer(this);
 	}
 
 	public MavenBuild() {
@@ -112,6 +116,15 @@ public class MavenBuild extends Build {
 	 */
 	public MavenProfileContainer profiles() {
 		return this.profiles;
+	}
+
+	public MavenModuleContainer modules() {
+		return this.modules;
+	}
+
+	public MavenModule getMavenModuleByName(String name) {
+		return this.modules.getModules().stream().filter((module) -> module.getName().equals(name)).findFirst()
+				.orElse(null);
 	}
 
 }

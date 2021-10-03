@@ -88,6 +88,15 @@ class BuildItemContainerTests {
 	}
 
 	@Test
+	void removeAll() {
+		BuildItemContainer<String, String> container = createTestContainer(new LinkedHashMap<>());
+		container.add("test", "value");
+		assertThat(container.isEmpty()).isFalse();
+		container.clear();
+		assertThat(container.isEmpty()).isTrue();
+	}
+
+	@Test
 	void removeUnknownElement() {
 		BuildItemContainer<String, String> container = createTestContainer(new LinkedHashMap<>());
 		container.add("test", "value");

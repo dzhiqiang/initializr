@@ -73,6 +73,8 @@ public class ArchitectureGroup extends DefaultMetadataElement {
 	}
 
 	public void index() {
+		this.typeModule.clear();
+		this.nameModule.clear();
 		for (Module module : this.content) {
 			indexedTypeModule(module.getType(), module);
 			indexedNameModule(module.getName(), module);
@@ -119,6 +121,15 @@ public class ArchitectureGroup extends DefaultMetadataElement {
 		return architectureGroup;
 	}
 
+	public static ArchitectureGroup withId(String id, String name, boolean defaultValue, Module... modules) {
+		ArchitectureGroup architectureGroup = new ArchitectureGroup();
+		architectureGroup.setId(id);
+		architectureGroup.setName(name);
+		architectureGroup.getContent().addAll(Arrays.asList(modules));
+		architectureGroup.setDefault(defaultValue);
+		return architectureGroup;
+	}
+
 	public void validate() {
 
 		if (!StringUtils.hasText(this.getId())) {
@@ -126,7 +137,7 @@ public class ArchitectureGroup extends DefaultMetadataElement {
 		}
 
 		this.content.forEach((module) -> module.validate());
-
+		index();
 	}
 
 }

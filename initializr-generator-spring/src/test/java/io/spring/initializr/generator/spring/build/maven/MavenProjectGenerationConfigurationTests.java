@@ -18,7 +18,9 @@ package io.spring.initializr.generator.spring.build.maven;
 
 import java.nio.file.Path;
 
+import io.spring.initializr.generator.architecture.layered.LayeredArchitecture;
 import io.spring.initializr.generator.buildsystem.BuildWriter;
+import io.spring.initializr.generator.buildsystem.Dependency;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuildSystem;
 import io.spring.initializr.generator.language.java.JavaLanguage;
 import io.spring.initializr.generator.packaging.war.WarPackaging;
@@ -126,6 +128,22 @@ class MavenProjectGenerationConfigurationTests {
 		description.setLanguage(new JavaLanguage());
 		ProjectStructure project = this.projectTester.generate(description);
 		assertThat(project).textFile("pom.xml").doesNotContain("            <exclusions>");
+	}
+
+	@Test
+	void testMultiPomDependency() {
+		MutableProjectDescription description = new MutableProjectDescription();
+		description.setPlatformVersion(Version.parse("2.4.0-M1"));
+		description.setLanguage(new JavaLanguage());
+		description.setArchitecture(new LayeredArchitecture());
+		description.setName("demo");
+		description.setArtifactId("test");
+		description.addDependency("test", Dependency.withCoordinates("com.dzq", "test").build());
+		ProjectStructure project = this.projectTester.generate(description);
+		assertThat(project).textFile("pom.xml").contains("<module>demo-api</module>");
+		assertThat(project).textFile("demo-api/pom.xml").contains("<artifactId>test-api</artifactId>");
+		assertThat(project).textFile("demo-service/pom.xml").contains("<artifactId>test-service</artifactId>")
+				.contains("<artifactId>test-api</artifactId>");
 	}
 
 }

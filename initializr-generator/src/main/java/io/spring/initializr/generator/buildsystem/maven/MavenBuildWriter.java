@@ -75,6 +75,7 @@ public class MavenBuildWriter {
 			writeProjectCoordinates(writer, settings);
 			writePackaging(writer, settings);
 			writeProjectName(writer, settings);
+			writeModules(writer, build.modules());
 			writeCollectionElement(writer, "licenses", settings.getLicenses(), this::writeLicense);
 			writeCollectionElement(writer, "developers", settings.getDevelopers(), this::writeDeveloper);
 			writeScm(writer, settings.getScm());
@@ -141,6 +142,14 @@ public class MavenBuildWriter {
 	private void writeProjectName(IndentingWriter writer, MavenBuildSettings settings) {
 		writeSingleElement(writer, "name", settings.getName());
 		writeSingleElement(writer, "description", settings.getDescription());
+	}
+
+	private void writeModules(IndentingWriter writer, MavenModuleContainer mavenModule) {
+		if (mavenModule.isEmpty()) {
+			return;
+		}
+		writeElement(writer, "modules", () -> mavenModule.getModules()
+				.forEach((entry) -> writeSingleElement(writer, "module", entry.getModuleName())));
 	}
 
 	private void writeProperties(IndentingWriter writer, PropertyContainer properties) {

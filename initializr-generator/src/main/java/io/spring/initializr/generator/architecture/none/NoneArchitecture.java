@@ -45,4 +45,9 @@ public class NoneArchitecture implements Architecture {
 		return MULTI_MODULE;
 	}
 
+	@Override
+	public String toString() {
+		return id();
+	}
+
 }

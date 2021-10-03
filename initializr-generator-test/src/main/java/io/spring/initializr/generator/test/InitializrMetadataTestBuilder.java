@@ -183,13 +183,8 @@ public class InitializrMetadataTestBuilder {
 	}
 
 	public InitializrMetadataTestBuilder addDefaultArchitectures() {
-		this.builder.withCustomizer((it) -> {
-			ArchitectureGroup architectureGroup = new ArchitectureGroup();
-			architectureGroup.setId("none");
-			architectureGroup.setName("None");
-			architectureGroup.setDefault(true);
-			it.getArchitectures().getContent().add(architectureGroup);
-		});
+		addArchitecture("none", "None", true).addArchitecture("layered", "分层架构", false, Module.create("api", "api"),
+				Module.createWithDependencies("service", "service", "api"));
 		return this;
 	}
 
@@ -280,9 +275,10 @@ public class InitializrMetadataTestBuilder {
 		return this;
 	}
 
-	public InitializrMetadataTestBuilder addArchitecture(String id, String name, Module... modules) {
+	public InitializrMetadataTestBuilder addArchitecture(String id, String name, boolean defaultValue,
+			Module... modules) {
 		this.builder.withCustomizer((it) -> {
-			ArchitectureGroup architectureGroup = ArchitectureGroup.withId(id, name, modules);
+			ArchitectureGroup architectureGroup = ArchitectureGroup.withId(id, name, defaultValue, modules);
 			it.getArchitectures().merge(Arrays.asList(architectureGroup));
 		});
 		return this;

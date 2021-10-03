@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.spring.initializr.generator.version.Version;
 import io.spring.initializr.generator.version.Version.Format;
 import io.spring.initializr.generator.version.VersionParser;
+import io.spring.initializr.metadata.ArchitectureGroupCapability;
 import io.spring.initializr.metadata.DefaultMetadataElement;
 import io.spring.initializr.metadata.DependenciesCapability;
 import io.spring.initializr.metadata.Dependency;
@@ -84,6 +85,7 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 		singleSelect(delegate, metadata.getPackagings());
 		singleSelect(delegate, metadata.getJavaVersions());
 		singleSelect(delegate, metadata.getLanguages());
+		architectures(delegate, metadata.getArchitectures());
 		singleSelect(delegate, metadata.getBootVersions(), this::mapVersionMetadata, this::formatVersion);
 		text(delegate, metadata.getGroupId());
 		text(delegate, metadata.getArtifactId());
@@ -92,6 +94,19 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 		text(delegate, metadata.getDescription());
 		text(delegate, metadata.getPackageName());
 		return delegate.toString();
+	}
+
+	private void architectures(ObjectNode parent, ArchitectureGroupCapability architectures) {
+		ObjectNode architecture = nodeFactory.objectNode();
+		architecture.put("type", architectures.getType().getName());
+		DefaultMetadataElement defaultType = architectures.getDefault();
+		if (defaultType != null) {
+			architecture.put("default", defaultType.getId());
+		}
+		ArrayNode values = nodeFactory.arrayNode();
+		values.addAll(architectures.getContent().stream().map(this::mapValue).collect(Collectors.toList()));
+		architecture.set("values", values);
+		parent.set(architectures.getId(), architecture);
 	}
 
 	protected ObjectNode links(ObjectNode parent, List<Type> types, String appUrl) {

@@ -60,7 +60,10 @@ class ConditionalOnArchitectureMultiTests {
 	@Test
 	void outcomeWithNoAvailableArchitecture() {
 		MutableProjectDescription description = new MutableProjectDescription();
-		assertCondition(description, (context) -> assertThat(context.getBeansOfType(String.class)).isEmpty());
+		assertCondition(description, (context) -> {
+			assertThat(context.getBeansOfType(String.class)).hasSize(1);
+			assertThat(context.getBean(String.class)).isEqualTo("testFalse");
+		});
 	}
 
 	private void assertCondition(MutableProjectDescription description, Consumer<ProjectGenerationContext> context) {
