@@ -181,6 +181,21 @@
       }
     ]
   },
+  "demo": {
+    "type": "hierarchical-multi-select",
+    "values": [
+      {
+        "id": "web",
+        "name": "web基础示例",
+        "description": "Spring MVC的示例"
+      },
+      {
+        "id": "gson",
+        "name": "Gson示例",
+        "description": "简单的Gson示例"
+      }
+    ]
+  },
   "groupId": {
     "type": "text",
     "default": "com.example"

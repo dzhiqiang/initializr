@@ -26,31 +26,11 @@ import org.springframework.util.StringUtils;
  *
  * @author Duan zhiqiang
  */
-public class Demo {
-
-	private String name;
-
-	private String id;
+public class Demo extends MetadataElement implements Describable {
 
 	private String description;
 
 	private List<String> templates = new ArrayList<>();
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getId() {
-		return this.id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getDescription() {
 		return this.description;
@@ -70,7 +50,7 @@ public class Demo {
 
 	@Override
 	public String toString() {
-		return "Demo{" + "name='" + this.name + '\'' + ", id='" + this.id + '\'' + ", description='" + this.description
+		return "Demo{" + "name='" + getName() + '\'' + ", id='" + getId() + '\'' + ", description='" + this.description
 				+ '\'' + '}';
 	}
 
@@ -84,11 +64,11 @@ public class Demo {
 
 	public void validate() {
 
-		if (!StringUtils.hasText(this.name)) {
+		if (!StringUtils.hasText(getName())) {
 			throw new InvalidInitializrMetadataException("Demo requires name");
 		}
 
-		if (!StringUtils.hasText(this.id)) {
+		if (!StringUtils.hasText(getId())) {
 			throw new InvalidInitializrMetadataException("Demo requires id");
 		}
 

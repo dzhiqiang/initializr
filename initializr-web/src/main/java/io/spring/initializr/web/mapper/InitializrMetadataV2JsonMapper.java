@@ -29,6 +29,7 @@ import io.spring.initializr.generator.version.Version.Format;
 import io.spring.initializr.generator.version.VersionParser;
 import io.spring.initializr.metadata.ArchitectureGroupCapability;
 import io.spring.initializr.metadata.DefaultMetadataElement;
+import io.spring.initializr.metadata.DemosCapability;
 import io.spring.initializr.metadata.DependenciesCapability;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.DependencyGroup;
@@ -86,6 +87,7 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 		singleSelect(delegate, metadata.getJavaVersions());
 		singleSelect(delegate, metadata.getLanguages());
 		architectures(delegate, metadata.getArchitectures());
+		demos(delegate, metadata.getDemos());
 		singleSelect(delegate, metadata.getBootVersions(), this::mapVersionMetadata, this::formatVersion);
 		text(delegate, metadata.getGroupId());
 		text(delegate, metadata.getArtifactId());
@@ -96,7 +98,16 @@ public class InitializrMetadataV2JsonMapper implements InitializrMetadataJsonMap
 		return delegate.toString();
 	}
 
-	private void architectures(ObjectNode parent, ArchitectureGroupCapability architectures) {
+	protected void demos(ObjectNode parent, DemosCapability capability) {
+		ObjectNode demos = nodeFactory.objectNode();
+		demos.put("type", capability.getType().getName());
+		ArrayNode values = nodeFactory.arrayNode();
+		values.addAll(capability.getContent().stream().map(this::mapValue).collect(Collectors.toList()));
+		demos.set("values", values);
+		parent.set(capability.getId(), demos);
+	}
+
+	protected void architectures(ObjectNode parent, ArchitectureGroupCapability architectures) {
 		ObjectNode architecture = nodeFactory.objectNode();
 		architecture.put("type", architectures.getType().getName());
 		DefaultMetadataElement defaultType = architectures.getDefault();

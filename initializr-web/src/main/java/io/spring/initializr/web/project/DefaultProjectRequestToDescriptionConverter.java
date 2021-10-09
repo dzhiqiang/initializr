@@ -32,6 +32,7 @@ import io.spring.initializr.metadata.Demo;
 import io.spring.initializr.metadata.Dependency;
 import io.spring.initializr.metadata.InitializrConfiguration.Platform;
 import io.spring.initializr.metadata.InitializrMetadata;
+import io.spring.initializr.metadata.Module;
 import io.spring.initializr.metadata.Type;
 import io.spring.initializr.metadata.support.MetadataBuildItemMapper;
 import io.spring.initializr.metadata.support.MetadataDemoMapper;
@@ -102,10 +103,14 @@ public class DefaultProjectRequestToDescriptionConverter
 		resolvedDependencies.forEach((dependency) -> description.addDependency(dependency.getId(),
 				MetadataBuildItemMapper.toDependency(dependency)));
 		resolvedDemos.forEach((demo) -> description.addDemo(demo.getId(),
-				MetadataDemoMapper.getDemo(demo,
-						(template) -> MetadataTemplateMapper.getTemplate(template,
-								metadata.getConfiguration().getEnv().getTemplates().get(template),
-								(denpendency) -> description.getRequestedDependencies().get(denpendency)))));
+				MetadataDemoMapper.getDemo(demo, (template) -> MetadataTemplateMapper.getTemplate(template,
+						metadata.getConfiguration().getEnv().getTemplates().get(template), (denpendency) -> {
+							Dependency dependency = metadata.getDependencies().get(denpendency);
+							return MetadataBuildItemMapper.toDependency(dependency.resolve(platformVersion));
+						}, (type) -> {
+							Module module = metadata.getArchitectures().getModule(request.getArchitecture(), type);
+							return (module != null) ? request.getName() + "-" + module.getName() : null;
+						}))));
 	}
 
 	private void validate(ProjectRequest request, InitializrMetadata metadata) {

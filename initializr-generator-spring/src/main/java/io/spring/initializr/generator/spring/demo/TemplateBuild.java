@@ -80,7 +80,7 @@ public class TemplateBuild {
 						if (io.spring.initializr.metadata.Template.TEMPLATE_TYPE_CODE
 								.equals(template.getTemplateType())) {
 							projectRoot = projectRoot.resolve(description.getLanguage().id());
-							projectRoot = projectRoot.resolve(description.getPackageName());
+							projectRoot = projectRoot.resolve(description.getPackageName().replaceAll("\\.", "/"));
 						}
 						projectRoot = projectRoot.resolve(filename[0]);
 						return projectRoot;

@@ -28,9 +28,9 @@ public final class MetadataTemplateMapper {
 	}
 
 	public static io.spring.initializr.generator.demo.Template getTemplate(String id, Template template,
-			Function<String, Dependency> function) {
+			Function<String, Dependency> function, Function<String, String> moduleFactory) {
 		io.spring.initializr.generator.demo.Template.TemplateBuilder templateBuilder = new io.spring.initializr.generator.demo.Template.TemplateBuilder(
-				id, template.getName(), template.getTemplateType(), template.getType());
+				id, template.getName(), template.getTemplateType(), moduleFactory.apply(template.getType()));
 		template.getDependencies()
 				.forEach((dependency) -> templateBuilder.addDependency(dependency, function.apply(dependency)));
 		return templateBuilder.build();
