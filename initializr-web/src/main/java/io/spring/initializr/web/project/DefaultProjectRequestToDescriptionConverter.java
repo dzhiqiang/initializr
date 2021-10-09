@@ -17,10 +17,12 @@
 package io.spring.initializr.web.project;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import io.spring.initializr.generator.architecture.Architecture;
 import io.spring.initializr.generator.buildsystem.BuildSystem;
+import io.spring.initializr.generator.demo.Template;
 import io.spring.initializr.generator.language.Language;
 import io.spring.initializr.generator.packaging.Packaging;
 import io.spring.initializr.generator.project.MutableProjectDescription;
@@ -103,14 +105,19 @@ public class DefaultProjectRequestToDescriptionConverter
 		resolvedDependencies.forEach((dependency) -> description.addDependency(dependency.getId(),
 				MetadataBuildItemMapper.toDependency(dependency)));
 		resolvedDemos.forEach((demo) -> description.addDemo(demo.getId(),
-				MetadataDemoMapper.getDemo(demo, (template) -> MetadataTemplateMapper.getTemplate(template,
-						metadata.getConfiguration().getEnv().getTemplates().get(template), (denpendency) -> {
-							Dependency dependency = metadata.getDependencies().get(denpendency);
-							return MetadataBuildItemMapper.toDependency(dependency.resolve(platformVersion));
-						}, (type) -> {
-							Module module = metadata.getArchitectures().getModule(request.getArchitecture(), type);
-							return (module != null) ? request.getName() + "-" + module.getName() : null;
-						}))));
+				MetadataDemoMapper.getDemo(demo, getResolvedTemplate(request, platformVersion, metadata))));
+	}
+
+	private Function<String, Template> getResolvedTemplate(ProjectRequest request, Version platformVersion,
+			InitializrMetadata metadata) {
+		return (template) -> MetadataTemplateMapper.getTemplate(template,
+				metadata.getConfiguration().getEnv().getTemplates().get(template), (denpendency) -> {
+					Dependency dependency = metadata.getDependencies().get(denpendency);
+					return MetadataBuildItemMapper.toDependency(dependency.resolve(platformVersion));
+				}, (type) -> {
+					Module module = metadata.getArchitectures().getModule(request.getArchitecture(), type);
+					return (module != null) ? request.getName() + "-" + module.getName() : null;
+				});
 	}
 
 	private void validate(ProjectRequest request, InitializrMetadata metadata) {
